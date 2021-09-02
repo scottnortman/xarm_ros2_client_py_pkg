@@ -27,13 +27,22 @@ The simulated xarm in rviz should cycle through planning and pose execution
 
 '''
 
+from numpy.matrixlib.defmatrix import matrix
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Pose
 
 from xarm_msgs.srv import PlanPose  # send Pose target, get bool success
+from xarm_msgs.srv import PlanPoses # send array of Poses targets, get bool success
 from xarm_msgs.srv import PlanJoint # send float64[] target, get bool success
 from xarm_msgs.srv import PlanExec  # send bool wait, get bool success
+
+import sys
+sys.path.append('/home/snortman/code/facetest')
+from CartesianTrajectories import CartesianTrajectory
+
+import numpy as np
+from pyquaternion import Quaternion
 
 class XArmRos2ClientPy( Node ):
 
@@ -44,9 +53,12 @@ class XArmRos2ClientPy( Node ):
         self.plan_joint_srv_name = 'xarm_joint_plan'
         self.plan_pose_srv_name = 'xarm_pose_plan'
         self.exec_plan_srv_name = 'xarm_exec_plan'
+        self.plan_poses_srv_name = 'xarm_poses_plan'
+
+        self.cart_traj = CartesianTrajectory()
 
         # todo: get DOF from config file or parameter?
-        self.dof = 6
+        self.dof = 7
 
         # see xarm example code 
         self.tar_joint1 = {}
@@ -76,6 +88,13 @@ class XArmRos2ClientPy( Node ):
         self.target_pose1.orientation.y = 0.0
         self.target_pose1.orientation.z = 0.0
         self.target_pose1.orientation.w = 0.0
+        base_tx_flange_pose1 = np.identity(4)
+        base_tx_flange_pose1[0,3] = self.target_pose1.position.x
+        base_tx_flange_pose1[1,3] = self.target_pose1.position.y
+        base_tx_flange_pose1[2,3] = self.target_pose1.position.z
+        q = Quaternion(w=self.target_pose1.orientation.w, x=self.target_pose1.orientation.x, 
+            y=self.target_pose1.orientation.y, z=self.target_pose1.orientation.z)
+        base_tx_flange_pose1[0:3,0:3] = q.rotation_matrix
 
         self.target_pose2 = Pose()
         self.target_pose2.position.x = 0.3
@@ -85,6 +104,14 @@ class XArmRos2ClientPy( Node ):
         self.target_pose2.orientation.y = 0.0
         self.target_pose2.orientation.z = 0.0
         self.target_pose2.orientation.w = 0.0
+        base_tx_flange_pose2 = np.identity(4)
+        base_tx_flange_pose2[0,3] = self.target_pose2.position.x
+        base_tx_flange_pose2[1,3] = self.target_pose2.position.y
+        base_tx_flange_pose2[2,3] = self.target_pose2.position.z
+        q = Quaternion(w=self.target_pose2.orientation.w, x=self.target_pose2.orientation.x, 
+            y=self.target_pose2.orientation.y, z=self.target_pose2.orientation.z)
+        base_tx_flange_pose2[0:3,0:3] = q.rotation_matrix
+
 
         self.target_pose3 = Pose()
         self.target_pose3.position.x = 0.3
@@ -94,6 +121,14 @@ class XArmRos2ClientPy( Node ):
         self.target_pose3.orientation.y = 0.0
         self.target_pose3.orientation.z = 0.0
         self.target_pose3.orientation.w = 0.0
+        base_tx_flange_pose3 = np.identity(4)
+        base_tx_flange_pose3[0,3] = self.target_pose3.position.x
+        base_tx_flange_pose3[1,3] = self.target_pose3.position.y
+        base_tx_flange_pose3[2,3] = self.target_pose3.position.z
+        q = Quaternion(w=self.target_pose3.orientation.w, x=self.target_pose3.orientation.x, 
+            y=self.target_pose3.orientation.y, z=self.target_pose3.orientation.z)
+        base_tx_flange_pose3[0:3,0:3] = q.rotation_matrix
+
 
         self.target_pose4 = Pose()
         self.target_pose4.position.x = 0.3
@@ -103,9 +138,46 @@ class XArmRos2ClientPy( Node ):
         self.target_pose4.orientation.y = 0.0
         self.target_pose4.orientation.z = 0.0
         self.target_pose4.orientation.w = 0.0
+        base_tx_flange_pose4 = np.identity(4)
+        base_tx_flange_pose4[0,3] = self.target_pose4.position.x
+        base_tx_flange_pose4[1,3] = self.target_pose4.position.y
+        base_tx_flange_pose4[2,3] = self.target_pose4.position.z
+        q = Quaternion(w=self.target_pose4.orientation.w, x=self.target_pose4.orientation.x, 
+            y=self.target_pose4.orientation.y, z=self.target_pose4.orientation.z)
+        base_tx_flange_pose4[0:3,0:3] = q.rotation_matrix
 
         self.target_poses = [self.target_pose1, self.target_pose2, self.target_pose3, self.target_pose4]
 
+        # Create smooth cartesian trajectories for testing
+        # todo: better way to calculate number of steps
+        # go to pose2,4,1,3
+        nsteps = 2
+        base_tx_flange_segment1 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose2, base_tx_flange_pose4, nsteps )
+        base_tx_flange_segment2 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose4, base_tx_flange_pose1, nsteps )
+        base_tx_flange_segment3 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose1, base_tx_flange_pose3, nsteps )
+        base_tx_flange_segment4 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose3, base_tx_flange_pose2, nsteps )
+
+        # combine into one array
+        txs = base_tx_flange_segment1 + base_tx_flange_segment2 + base_tx_flange_segment3 + base_tx_flange_segment4
+
+        # Convert all to type Pose
+        self.base_poses_flange = []
+        for ii in range(0,len(txs)):
+            tx = txs[ii]
+            R = tx[0:3,0:3]
+            q = Quaternion(matrix=R)
+            t = tx[0:3,3]
+            p = Pose()
+            p.position.x = t[0]
+            p.position.y = t[1]
+            p.position.z = t[2]
+            p.orientation.w = q.w
+            p.orientation.x = q.x
+            p.orientation.y = q.y
+            p.orientation.z = q.z
+            self.base_poses_flange.append(p)
+
+        self.plan_poses_req = PlanPoses.Request()
 
         self.future = None
 
@@ -127,6 +199,13 @@ class XArmRos2ClientPy( Node ):
             self.get_logger().info(f'Service [{self.plan_pose_srv_name}] not ready; waiting...')
         else:
             self.get_logger().info(f'Service [{self.plan_pose_srv_name}] ready...')
+
+        self.plan_poses_req = PlanPoses.Request()
+        self.plan_poses_client = self.create_client( PlanPoses, self.plan_poses_srv_name)
+        while not self.plan_poses_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info(f'Service [{self.plan_poses_srv_name}] not ready; waiting...')
+        else:
+            self.get_logger().info(f'Service [{self.plan_poses_srv_name}] ready...')
 
         self.exec_plan_req = PlanExec.Request()
         self.exec_plan_client = self.create_client( PlanExec, self.exec_plan_srv_name )
@@ -162,6 +241,15 @@ class XArmRos2ClientPy( Node ):
         success = self.future.result().success
         self.get_logger().info(f'Service returned: [{success}]')
         return success
+
+    def planPosesTarget( self, poses_target ):
+        self.get_logger().info(f'Calling plan poses')
+        self.plan_poses_req.targets = poses_target
+        self.future = self.plan_poses_client.call_async(self.plan_poses_req)
+        rclpy.spin_until_future_complete( self, self.future )
+        success = self.future.result().success
+        self.get_logger().info(f'Service returned: [{success}]')
+        return success
     
 
 def main(args=None):
@@ -173,24 +261,47 @@ def main(args=None):
     while(rclpy.ok()):
 
         # Joint space motions
-        for targets in xarm_ros2_client_node.tar_joints:
-            if xarm_ros2_client_node.planJointTarget( targets[xarm_ros2_client_node.dof] ):
+        #if True:
+        if False:
+            for targets in xarm_ros2_client_node.tar_joints:
+                if xarm_ros2_client_node.planJointTarget( targets[xarm_ros2_client_node.dof] ):
+                    xarm_ros2_client_node.execPlan()
+                else:
+                    xarm_ros2_client_node.get_logger().info(f'Plan joint failed for: [{targets[xarm_ros2_client_node.dof]}]')
+
+        #if True:
+        if False:
+            # Restore to 0 
+            if xarm_ros2_client_node.planJointTarget(xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof] ):
                 xarm_ros2_client_node.execPlan()
             else:
-                xarm_ros2_client_node.get_logger().info(f'Plan joint failed for: [{targets[xarm_ros2_client_node.dof]}]')
+                xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof]}]')
 
-        # Restore to 0 
-        if xarm_ros2_client_node.planJointTarget(xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof] ):
-            xarm_ros2_client_node.execPlan()
-        else:
-            xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof]}]')
+        #if True:
+        if False:
+            #task space motions
+            for pose in xarm_ros2_client_node.target_poses:
+                if xarm_ros2_client_node.planPoseTarget( pose ):
+                    xarm_ros2_client_node.execPlan()
+                else:
+                    xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{pose}]')
 
-        #task space motions
-        for pose in xarm_ros2_client_node.target_poses:
-            if xarm_ros2_client_node.planPoseTarget( pose ):
+        #if True:
+        if False:    
+            # Restore to 0 
+            if xarm_ros2_client_node.planJointTarget(xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof] ):
                 xarm_ros2_client_node.execPlan()
             else:
-                xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{pose}]')
+                xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof]}]')
+
+        if True:
+            # Multi pose motions
+            if xarm_ros2_client_node.planPosesTarget( xarm_ros2_client_node.base_poses_flange ):
+                xarm_ros2_client_node.execPlan()
+            else:
+                xarm_ros2_client_node.get_logger().info('Plan failed for base_poses_flange...')
+
+        
 
     xarm_ros2_client_node.get_logger().info('Shutting down XArmRos2ClientNode...')
     xarm_ros2_client_node.destroy_node()
