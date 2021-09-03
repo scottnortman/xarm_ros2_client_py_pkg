@@ -33,6 +33,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Pose
 
+from xarm_msgs.srv import PlanCart # send array of Poses targets, get bool success
 from xarm_msgs.srv import PlanPose  # send Pose target, get bool success
 from xarm_msgs.srv import PlanPoses # send array of Poses targets, get bool success
 from xarm_msgs.srv import PlanJoint # send float64[] target, get bool success
@@ -55,6 +56,8 @@ class XArmRos2ClientPy( Node ):
         self.plan_pose_srv_name = 'xarm_pose_plan'
         self.exec_plan_srv_name = 'xarm_exec_plan'
         self.plan_poses_srv_name = 'xarm_poses_plan'
+        self.plan_cart_srv_name = 'xarm_cart_plan'
+
 
         self.cart_traj = CartesianTrajectory()
 
@@ -208,12 +211,24 @@ class XArmRos2ClientPy( Node ):
         else:
             self.get_logger().info(f'Service [{self.plan_poses_srv_name}] ready...')
 
+
+        self.plan_cart_req = PlanCart.Request()
+        self.plan_cart_client = self.create_client( PlanCart, self.plan_cart_srv_name )
+        while not self.plan_cart_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info(f'Service [{self.plan_cart_srv_name}] not ready; waiting...')
+        else:
+            self.get_logger().info(f'Service [{self.plan_cart_srv_name}] ready...')
+
+        
+
         self.exec_plan_req = PlanExec.Request()
         self.exec_plan_client = self.create_client( PlanExec, self.exec_plan_srv_name )
         while not self.exec_plan_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(f'Service [{self.exec_plan_srv_name}] not ready; waiting...')
         else:
             self.get_logger().info(f'Service [{self.exec_plan_srv_name}] ready...')
+
+        
 
 
     def execPlan( self, wait=True ):
@@ -248,6 +263,15 @@ class XArmRos2ClientPy( Node ):
         self.plan_poses_req.targets = poses_target
         self.future = self.plan_poses_client.call_async(self.plan_poses_req)
         rclpy.spin_until_future_complete( self, self.future )
+        success = self.future.result().success
+        self.get_logger().info(f'Service returned: [{success}]')
+        return success
+
+    def planCartTarget( self, poses_target ):
+        self.get_logger().info(f'Calling plan cart')
+        self.plan_cart_req.targets = poses_target
+        self.future = self.plan_cart_client.call_async(self.plan_cart_req)
+        rclpy.spin_until_future_complete(self, self.future)
         success = self.future.result().success
         self.get_logger().info(f'Service returned: [{success}]')
         return success
@@ -295,12 +319,21 @@ def main(args=None):
             else:
                 xarm_ros2_client_node.get_logger().info(f'Plan failed for: [{xarm_ros2_client_node.tar_joints[1][xarm_ros2_client_node.dof]}]')
 
-        if True:
+        #if True:
+        if False:
             # Multi pose motions
             if xarm_ros2_client_node.planPosesTarget( xarm_ros2_client_node.base_poses_flange ):
                 xarm_ros2_client_node.execPlan()
             else:
                 xarm_ros2_client_node.get_logger().info('Plan failed for base_poses_flange...')
+
+        if True:
+        #if False:
+            if xarm_ros2_client_node.planCartTarget( xarm_ros2_client_node.base_poses_flange ):
+                xarm_ros2_client_node.execPlan()
+            else:
+                xarm_ros2_client_node.get_logger().info('Plan failed for plan cart...')
+        
 
         
 
