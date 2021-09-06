@@ -155,7 +155,7 @@ class XArmRos2ClientPy( Node ):
         # Create smooth cartesian trajectories for testing
         # todo: better way to calculate number of steps
         # go to pose2,4,1,3
-        nsteps = 2
+        nsteps = 50
         base_tx_flange_segment1 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose2, base_tx_flange_pose4, nsteps )
         base_tx_flange_segment2 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose4, base_tx_flange_pose1, nsteps )
         base_tx_flange_segment3 = self.cart_traj.cart_trans_slerp( base_tx_flange_pose1, base_tx_flange_pose3, nsteps )
