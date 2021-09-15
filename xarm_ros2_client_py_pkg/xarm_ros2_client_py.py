@@ -46,6 +46,8 @@ from CartesianTrajectories import CartesianTrajectory
 import numpy as np
 from pyquaternion import Quaternion
 
+import time
+
 class XArmRos2ClientPy( Node ):
 
     def __init__(self, args):
@@ -333,6 +335,8 @@ def main(args=None):
                 xarm_ros2_client_node.execPlan()
             else:
                 xarm_ros2_client_node.get_logger().info('Plan failed for plan cart...')
+
+        time.sleep(2)
         
 
         
