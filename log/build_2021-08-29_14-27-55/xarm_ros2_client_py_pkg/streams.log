@@ -1,0 +1,17 @@
+[0.303s] Invoking command in '/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg': PYTHONPATH=/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg --editable --build-directory /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg/build --no-deps install_data --install-dir /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg
+[0.561s] running develop
+[0.719s] running egg_info
+[0.719s] writing xarm_ros2_client_py_pkg.egg-info/PKG-INFO
+[0.719s] writing dependency_links to xarm_ros2_client_py_pkg.egg-info/dependency_links.txt
+[0.720s] writing entry points to xarm_ros2_client_py_pkg.egg-info/entry_points.txt
+[0.720s] writing requirements to xarm_ros2_client_py_pkg.egg-info/requires.txt
+[0.720s] writing top-level names to xarm_ros2_client_py_pkg.egg-info/top_level.txt
+[0.745s] reading manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+[0.746s] writing manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+[0.781s] running build_ext
+[0.781s] Creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages/xarm-ros2-client-py-pkg.egg-link (link to .)
+[0.781s] Installing xarm_ros2_client_py script to /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/xarm_ros2_client_py_pkg
+[0.782s] 
+[0.782s] Installed /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg
+[0.782s] running install_data
+[0.803s] Invoked command in '/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg' returned '0': PYTHONPATH=/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg --editable --build-directory /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg/build --no-deps install_data --install-dir /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg

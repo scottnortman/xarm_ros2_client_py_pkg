@@ -1,0 +1,3 @@
+[console_scripts]
+xarm_ros2_client_py = xarm_ros2_client_py_pkg.xarm_ros2_client_py:main
+

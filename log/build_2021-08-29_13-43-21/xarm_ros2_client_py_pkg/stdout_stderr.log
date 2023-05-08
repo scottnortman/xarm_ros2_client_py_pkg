@@ -1,0 +1,15 @@
+running develop
+running egg_info
+writing xarm_ros2_client_py_pkg.egg-info/PKG-INFO
+writing dependency_links to xarm_ros2_client_py_pkg.egg-info/dependency_links.txt
+writing entry points to xarm_ros2_client_py_pkg.egg-info/entry_points.txt
+writing requirements to xarm_ros2_client_py_pkg.egg-info/requires.txt
+writing top-level names to xarm_ros2_client_py_pkg.egg-info/top_level.txt
+reading manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+writing manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages/xarm-ros2-client-py-pkg.egg-link (link to .)
+Installing xarm_ros2_client_py script to /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/xarm_ros2_client_py_pkg
+
+Installed /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg
+running install_data

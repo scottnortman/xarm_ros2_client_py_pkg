@@ -1,0 +1,25 @@
+[0.216s] Invoking command in '/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg': PYTHONPATH=/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg --editable --build-directory /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg/build --no-deps install_data --install-dir /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg
+[0.409s] running develop
+[0.522s] running egg_info
+[0.522s] creating xarm_ros2_client_py_pkg.egg-info
+[0.522s] writing xarm_ros2_client_py_pkg.egg-info/PKG-INFO
+[0.522s] writing dependency_links to xarm_ros2_client_py_pkg.egg-info/dependency_links.txt
+[0.523s] writing entry points to xarm_ros2_client_py_pkg.egg-info/entry_points.txt
+[0.523s] writing requirements to xarm_ros2_client_py_pkg.egg-info/requires.txt
+[0.523s] writing top-level names to xarm_ros2_client_py_pkg.egg-info/top_level.txt
+[0.523s] writing manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+[0.545s] reading manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+[0.545s] writing manifest file 'xarm_ros2_client_py_pkg.egg-info/SOURCES.txt'
+[0.566s] running build_ext
+[0.566s] Creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages/site.py
+[0.568s] Creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages/xarm-ros2-client-py-pkg.egg-link (link to .)
+[0.568s] Installing xarm_ros2_client_py script to /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/xarm_ros2_client_py_pkg
+[0.568s] 
+[0.568s] Installed /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg
+[0.568s] running install_data
+[0.569s] creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/share/ament_index
+[0.569s] creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/share/ament_index/resource_index
+[0.569s] creating /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/share/ament_index/resource_index/packages
+[0.569s] copying resource/xarm_ros2_client_py_pkg -> /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/share/ament_index/resource_index/packages
+[0.569s] copying package.xml -> /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/share/xarm_ros2_client_py_pkg
+[0.587s] Invoked command in '/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg' returned '0': PYTHONPATH=/home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg --editable --build-directory /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/build/xarm_ros2_client_py_pkg/build --no-deps install_data --install-dir /home/snortman/ros2_ws/src/xarm_ros2_client_py_pkg/install/xarm_ros2_client_py_pkg

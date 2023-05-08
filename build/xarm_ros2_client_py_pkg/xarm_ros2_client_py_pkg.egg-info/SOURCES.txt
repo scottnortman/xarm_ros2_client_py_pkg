@@ -1,0 +1,13 @@
+package.xml
+setup.cfg
+setup.py
+resource/xarm_ros2_client_py_pkg
+xarm_ros2_client_py_pkg/__init__.py
+xarm_ros2_client_py_pkg/xarm_ros2_client_py.py
+xarm_ros2_client_py_pkg.egg-info/PKG-INFO
+xarm_ros2_client_py_pkg.egg-info/SOURCES.txt
+xarm_ros2_client_py_pkg.egg-info/dependency_links.txt
+xarm_ros2_client_py_pkg.egg-info/entry_points.txt
+xarm_ros2_client_py_pkg.egg-info/requires.txt
+xarm_ros2_client_py_pkg.egg-info/top_level.txt
+xarm_ros2_client_py_pkg.egg-info/zip-safe
