@@ -39,9 +39,7 @@ from xarm_msgs.srv import PlanPoses # send array of Poses targets, get bool succ
 from xarm_msgs.srv import PlanJoint # send float64[] target, get bool success
 from xarm_msgs.srv import PlanExec  # send bool wait, get bool success
 
-import sys
-sys.path.append('/home/snortman/code/facetest')
-from CartesianTrajectories import CartesianTrajectory
+from restful_core_py.CartesianTrajectories import CartesianTrajectory
 
 import numpy as np
 from pyquaternion import Quaternion
@@ -346,3 +344,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
